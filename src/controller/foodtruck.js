@@ -71,8 +71,12 @@ export default ({ config, db}) => {
     });
   });
 
-  // 'v1/foodtruck/:id' - Delete
+  // 'v1/foodtruck/:id' - Delete foodtruck and all reviews
   api.delete('/:id', (req, res) => {
+
+// getting list of all reviews attached to the foodtruck
+    // let listOfReviews = Review.find({foodtruck: req.params.id});
+    // listOfReviews.forEach(review => res.json({ message: `Review ID is ${review._id} `}));
     FoodTruck.remove({
       _id: req.params.id
     }, (err, foodtruck) => {
