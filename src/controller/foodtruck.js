@@ -4,6 +4,8 @@ import FoodTruck from '../model/foodtruck';
 import Review from '../model/review';
 import bodyParser from 'body-parser';
 
+import { authenticate } from '../middleware/authMiddleware';
+
 
 export default ({ config, db}) => {
   let api = Router();
@@ -11,20 +13,19 @@ export default ({ config, db}) => {
   // CRUD - Create Read Update Delete
 
   // 'v1/foodtruck/add' - Create
-  api.post('/add', (req, res) => {
+  api.post('/add', authenticate, (req, res) => {
     let newFoodTruck = new FoodTruck();
     newFoodTruck.name = req.body.name;
     newFoodTruck.foodtype = req.body.foodtype;
     newFoodTruck.avgcost = req.body.avgcost;
     newFoodTruck.geometry.coordinates = req.body.geometry.coordinates;
-  //newFoodTruck.reviews = req.body.reviews;
 
     newFoodTruck.save(err => {
       if(err) {
         res.send(err);
 
       }
-      res.json({ message: 'FoodTruck saved successfully'});
+      res.json({ message: `FoodTruck with the name ${req.body.name} created successfully`});
     });
 
   });
@@ -36,7 +37,7 @@ export default ({ config, db}) => {
       if(err) {
         res.send(err);
       }
-      //res.json({ message: 'List of FoodTrucks:'});
+
       res.json(foodtrucks);
     });
   });
@@ -71,19 +72,21 @@ export default ({ config, db}) => {
     });
   });
 
-  // 'v1/foodtruck/:id' - Delete foodtruck and all reviews
+  // 'v1/foodtruck/:id' - Delete foodtruck and all thier reviews
   api.delete('/:id', (req, res) => {
 
-// getting list of all reviews attached to the foodtruck
-    // let listOfReviews = Review.find({foodtruck: req.params.id});
-    // listOfReviews.forEach(review => res.json({ message: `Review ID is ${review._id} `}));
+    Review.remove({foodtruck: req.params.id} , (err, reviews) => {
+      if(err) res.send(err);
+
+    });
+
     FoodTruck.remove({
       _id: req.params.id
     }, (err, foodtruck) => {
       if (err) {
         res.send(err);
       }
-      res.json({ message: "FoodTruck Successfully Removed"});
+      res.json({ message: `FoodTruck with ID - ${req.params.id} Successfully Removed`});
     });
 
   });
@@ -150,7 +153,6 @@ api.get('/foodtype/:foodtype', (req, res) => {
     res.json(foodtrucks);
   });
 });
-
 
   return api;
 
