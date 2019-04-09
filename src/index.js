@@ -32,8 +32,11 @@ passport.deserializeUser(Account.deserializeUser());
 // api routes v1
 app.use('/v1', routes);
 
-app.server.listen(config.port);
+//app.server.listen('localhost', config.port);
+app.server.listen({host: 'localhost', port: config.port}); //works
+//app.server.listen(config.port);// original
 
-console.log(`Started on port ${app.server.address().port}`);
+// console.log(`Started on port ${app.server.address().port}`);
+console.log(`Started on port ${app.server}`);
 
 export default app;
