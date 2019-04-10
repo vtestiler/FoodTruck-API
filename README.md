@@ -1,7 +1,7 @@
 "# FoodTruck-API"
 This is Nodejs REST API.
 Required nodejs to install it.
-Download it using "git clone".
+Download it using "git clone https://github.com/vtestiler/FoodTruck-API.git".
 Install with "npm install".
 If install on AWS ES2 ubuntu server, make sure that security group allow TCP on port 3005.
 Also UFW on the ubuntu server needs to allow inbound connection on port 3005.
