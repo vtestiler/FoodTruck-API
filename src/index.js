@@ -33,10 +33,12 @@ passport.deserializeUser(Account.deserializeUser());
 app.use('/v1', routes);
 
 //app.server.listen('localhost', config.port);
-app.server.listen({host: 'localhost', port: config.port}); //works
+app.server.listen({host: '0.0.0.0', port: config.port}); // If you use localhost, will  not be able to connect
+// from outside!!!!
+
 //app.server.listen(config.port);// original
 
 // console.log(`Started on port ${app.server.address().port}`);
-console.log(`Started on port ${app.server}`);
+console.log(`Started on port ${config.port`);
 
 export default app;
